@@ -1979,6 +1979,7 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var _this = this;
 
+    this.fetchLocation();
     this.fetchData();
     var placesAutocomplete = places({
       appId: 'pl869LYMQK61',
@@ -2024,19 +2025,31 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    fetchData: function fetchData() {
+    fetchLocation: function fetchLocation() {
       var _this2 = this;
+
+      axios.get('/api/location').then(function (res) {
+        res.data;
+        console.log(res.data);
+        _this2.location.name = "".concat(res.data.cityName, ", ").concat(res.data.countryName);
+        _this2.location.lat = res.data.latitude;
+        _this2.location.lon = res.data.longitude;
+      })["catch"](function (err) {
+        console.log(err);
+      });
+    },
+    fetchData: function fetchData() {
+      var _this3 = this;
 
       fetch("/api/weather?lat=".concat(this.location.lat, "&lon=").concat(this.location.lon)).then(function (response) {
         return response.json();
       }).then(function (data) {
-        console.log(data);
-        _this2.currentTemp.actual = Math.round(data.current.temp);
-        _this2.currentTemp.feels = Math.round(data.current.feels_like);
-        _this2.currentTemp.summary = data.current.weather[0].description;
-        _this2.currentTemp.icon = data.current.weather[0].icon;
-        _this2.currentTemp.name = data.name;
-        _this2.daily = data.daily;
+        _this3.currentTemp.actual = Math.round(data.current.temp);
+        _this3.currentTemp.feels = Math.round(data.current.feels_like);
+        _this3.currentTemp.summary = data.current.weather[0].description;
+        _this3.currentTemp.icon = data.current.weather[0].icon;
+        _this3.currentTemp.name = data.name;
+        _this3.daily = data.daily;
       });
     },
     toDayOfWeek: function toDayOfWeek(timestamp) {

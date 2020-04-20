@@ -69,6 +69,8 @@
   export default {
     mounted() {
 
+      this.fetchLocation();
+
       this.fetchData();
 
       const placesAutocomplete = places({
@@ -116,14 +118,24 @@
         },
         daily: [],
       }
-    }
-    ,
+    },
     methods: {
+      fetchLocation() {
+        axios.get('/api/location')
+          .then(res => {
+            (res.data);
+            console.log(res.data);
+            this.location.name = `${res.data.cityName}, ${res.data.countryName}`;
+            this.location.lat = res.data.latitude;
+            this.location.lon = res.data.longitude;
+          }).catch(err => {
+          console.log(err)
+        })
+      },
       fetchData() {
         fetch(`/api/weather?lat=${this.location.lat}&lon=${this.location.lon}`)
           .then(response => response.json())
           .then(data => {
-            console.log(data);
             this.currentTemp.actual = Math.round(data.current.temp);
             this.currentTemp.feels = Math.round(data.current.feels_like);
             this.currentTemp.summary = data.current.weather[0].description;
@@ -133,14 +145,13 @@
 
             this.daily = data.daily;
           })
-      }
-      ,
+      },
       toDayOfWeek(timestamp) {
         const newDate = new Date(timestamp * 1000);
         const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
         return days[newDate.getDay()];
-      }
-    }
+      },
+    },
   }
 </script>
