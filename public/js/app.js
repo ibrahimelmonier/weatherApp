@@ -2030,7 +2030,6 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get('/api/location').then(function (res) {
         res.data;
-        console.log(res.data);
         _this2.location.name = "".concat(res.data.cityName, ", ").concat(res.data.countryName);
         _this2.location.lat = res.data.latitude;
         _this2.location.lon = res.data.longitude;

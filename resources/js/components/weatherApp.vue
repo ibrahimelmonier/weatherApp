@@ -124,7 +124,6 @@
         axios.get('/api/location')
           .then(res => {
             (res.data);
-            console.log(res.data);
             this.location.name = `${res.data.cityName}, ${res.data.countryName}`;
             this.location.lat = res.data.latitude;
             this.location.lon = res.data.longitude;
